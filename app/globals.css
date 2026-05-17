@@ -1,26 +1,192 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-electric-purple: var(--electric-purple);
+  --color-cyan: var(--cyan);
+  --color-hot-pink: var(--hot-pink);
+  --color-sunset-orange: var(--sunset-orange);
+  --color-lime-green: var(--lime-green);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #ffffff;
+  --foreground: #020617;
+
+  /* Vibrant Palette */
+  --electric-purple: #7c3aed;
+  --cyan: #06b6d4;
+  --hot-pink: #db2777;
+  --sunset-orange: #f97316;
+  --lime-green: #84cc16;
+
+  --primary: var(--electric-purple);
+  --primary-foreground: #ffffff;
+
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+
+  --accent: var(--cyan);
+  --accent-foreground: #ffffff;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: var(--electric-purple);
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #09090b;
+  /* Darker background for vibrancy */
+  --foreground: #f8fafc;
+
+  /* Brighten for dark mode */
+  --electric-purple: #a78bfa;
+  --cyan: #22d3ee;
+  --hot-pink: #f472b6;
+  --sunset-orange: #fb923c;
+  --lime-green: #a3e635;
+
+  --primary: var(--electric-purple);
+  --primary-foreground: #ffffff;
+
+  --secondary: #27272a;
+  --secondary-foreground: #f8fafc;
+
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+
+  --accent: var(--cyan);
+  --accent-foreground: #0f172a;
+
+  --border: #27272a;
+  --input: #27272a;
+  --ring: var(--electric-purple);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-body {
+@layer utilities {
+  .grid-tiling {
+    background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+
+  .glass {
+    @apply bg-background/60 backdrop-blur-xl border border-white/20 dark:border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-electric-purple via-hot-pink to-cyan;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+}
+
+.auth-card {
+  @apply bg-background/60 backdrop-blur-xl border border-white/10 dark:border-white/5 rounded-3xl shadow-2xl p-8 max-w-md w-full;
+}
+
+.btn-primary {
+  @apply bg-primary text-primary-foreground px-6 py-3 rounded-2xl font-bold hover:scale-[1.05] active:scale-[0.98] transition-all shadow-lg shadow-primary/25 flex items-center justify-center disabled:opacity-50 relative overflow-hidden;
+}
+
+.input-field {
+  @apply w-full px-4 py-3 rounded-xl border border-input bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all backdrop-blur-sm;
+}
+
+/* Locomotive Scroll container */
+[data-scroll-container] {
+  overflow: auto;
+}
+
+/* Swiper Testimonials Custom Styles */
+.testimonials-swiper .swiper-pagination {
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+.testimonial-bullet {
+  width: 12px;
+  height: 12px;
+  background: var(--muted-foreground);
+  opacity: 0.3;
+  border-radius: 9999px;
+  display: inline-block;
+  margin: 0 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.testimonial-bullet-active {
+  opacity: 1;
+  background: var(--primary);
+  width: 32px;
+  border-radius: 9999px;
+}
+
+.testimonials-swiper .swiper-button-prev,
+.testimonials-swiper .swiper-button-next {
+  color: var(--primary);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+  width: 44px;
+  height: 44px;
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.testimonials-swiper .swiper-button-prev:hover,
+.testimonials-swiper .swiper-button-next:hover {
+  opacity: 1;
+}
+
+.testimonials-swiper .swiper-button-prev::after,
+.testimonials-swiper .swiper-button-next::after {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.testimonials-swiper .swiper-slide {
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }

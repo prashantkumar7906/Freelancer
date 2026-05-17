@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  BUYER
+  FREELANCER
+}
+
+enum UserStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id                String       @id @default(uuid())
+  email             String       @unique
+  phoneNumber       String       @unique
+  passwordHash      String
+  role              UserRole
+  status            UserStatus   @default(PENDING)
+  emailVerified     Boolean      @default(false)
+  emailVerifiedAt   DateTime?
+  phoneVerified     Boolean      @default(false)
+  phoneVerifiedAt   DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  emailVerifications EmailVerification[]
+  phoneVerifications PhoneVerification[]
+  projects           Project[]           @relation("BuyerProjects")
+  bids               Bid[]               @relation("FreelancerBids")
+  wallet             Wallet?
+  transactions       Transaction[]
+  notifications      Notification[]
+}
+
+model EmailVerification {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token      String    @unique
+  expiresAt  DateTime
+  verifiedAt DateTime?
+
+  @@index([userId])
+}
+
+model PhoneVerification {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  otpCode    String
+  expiresAt  DateTime
+  verifiedAt DateTime?
+  attempts   Int       @default(0)
+
+  @@index([userId])
+}
+
+enum ProjectStatus {
+  OPEN
+  AWARDED
+  COMPLETED
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  buyerId     String
+  buyer       User          @relation("BuyerProjects", fields: [buyerId], references: [id])
+  title       String
+  description String
+  budget      Float
+  category    String
+  status      ProjectStatus @default(OPEN)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  bids         Bid[]
+  transactions Transaction[]
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  SHORTLISTED
+}
+
+model Bid {
+  id              String    @id @default(uuid())
+  projectId       String
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  freelancerId    String
+  freelancer      User      @relation("FreelancerBids", fields: [freelancerId], references: [id])
+  bidAmount       Float
+  proposal        String
+  status          BidStatus @default(PENDING)
+  statusUpdatedAt DateTime  @updatedAt
+  createdAt       DateTime  @default(now())
+
+  history BidStatusHistory[]
+
+  @@index([projectId])
+  @@index([freelancerId])
+}
+
+model BidStatusHistory {
+  id               String    @id @default(uuid())
+  bidId            String
+  bid              Bid       @relation(fields: [bidId], references: [id], onDelete: Cascade)
+  oldStatus        BidStatus?
+  newStatus        BidStatus
+  changedBy        String
+  changedAt        DateTime  @default(now())
+  notificationSent Boolean   @default(false)
+
+  @@index([bidId])
+}
+
+enum TransactionType {
+  DEPOSIT
+  UPFRONT
+  BALANCE
+  COMMISSION
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Transaction {
+  id                String            @id @default(uuid())
+  userId            String
+  user              User              @relation(fields: [userId], references: [id])
+  projectId         String?
+  project           Project?          @relation(fields: [projectId], references: [id])
+  amount            Float
+  type              TransactionType
+  status            TransactionStatus @default(PENDING)
+  razorpayPaymentId String?
+  createdAt         DateTime          @default(now())
+
+  @@index([userId])
+  @@index([projectId])
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balance   Float    @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model PlatformSettings {
+  id             String   @id @default(uuid())
+  settingName    String   @unique // e.g., "commission_rate"
+  value          String
+  updatedBy      String
+  updatedAt      DateTime @updatedAt
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String    // e.g., "EMAIL", "SMS"
+  subject   String?
+  message   String
+  sentAt    DateTime?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}

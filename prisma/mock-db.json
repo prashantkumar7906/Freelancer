@@ -1,0 +1,149 @@
+{
+  "mockUsers": [
+    {
+      "id": "test-freelancer-id",
+      "email": "test@pro.com",
+      "passwordHash": "password123",
+      "phoneNumber": "0000000000",
+      "role": "FREELANCER",
+      "status": "APPROVED",
+      "emailVerified": true,
+      "phoneVerified": true
+    },
+    {
+      "id": "test-admin-id",
+      "email": "admin@pro.com",
+      "passwordHash": "password123",
+      "phoneNumber": "1111111111",
+      "role": "ADMIN",
+      "status": "APPROVED",
+      "emailVerified": true,
+      "phoneVerified": true
+    },
+    {
+      "id": "test-buyer-id",
+      "email": "buyer@pro.com",
+      "passwordHash": "password123",
+      "phoneNumber": "2222222222",
+      "role": "BUYER",
+      "status": "APPROVED",
+      "emailVerified": true,
+      "phoneVerified": true
+    },
+    {
+      "id": "pending-user-id",
+      "email": "pending@pro.com",
+      "passwordHash": "password123",
+      "phoneNumber": "3333333333",
+      "role": "FREELANCER",
+      "status": "APPROVED",
+      "emailVerified": true,
+      "phoneVerified": true,
+      "createdAt": "2026-03-18T11:46:46.207Z"
+    }
+  ],
+  "mockProjects": [
+    {
+      "id": "pooauk",
+      "createdAt": "2026-03-19T11:47:58.812Z",
+      "status": "AWARDED",
+      "bids": [
+        {
+          "id": "jlxl4e",
+          "createdAt": "2026-03-19T11:48:41.881Z",
+          "status": "ACCEPTED",
+          "projectId": "pooauk",
+          "freelancerId": "test-freelancer-id",
+          "bidAmount": 74999,
+          "proposal": "i have technical edge in MERN\n"
+        }
+      ],
+      "title": "website for ecommerce ",
+      "description": "i want to serve the website to server b2b and b2c",
+      "budget": 75000,
+      "category": "Web Development",
+      "buyerId": "test-buyer-id"
+    },
+    {
+      "id": "5cgldp",
+      "createdAt": "2026-03-19T12:31:05.629Z",
+      "status": "OPEN",
+      "bids": [],
+      "title": "website",
+      "description": "website",
+      "budget": 10000,
+      "category": "Web Development",
+      "buyerId": "test-buyer-id"
+    }
+  ],
+  "mockWallets": [
+    {
+      "id": "w-test-freelancer-id",
+      "userId": "test-freelancer-id",
+      "balance": 0
+    },
+    {
+      "id": "w-test-admin-id",
+      "userId": "test-admin-id",
+      "balance": 50000
+    },
+    {
+      "id": "w-test-buyer-id",
+      "userId": "test-buyer-id",
+      "balance": 178000.3
+    },
+    {
+      "id": "w-pending-user-id",
+      "userId": "pending-user-id",
+      "balance": 75000
+    }
+  ],
+  "mockTransactions": [
+    {
+      "id": "g9wn4j",
+      "createdAt": "2026-03-19T11:44:29.351Z",
+      "status": "COMPLETED",
+      "userId": "test-buyer-id",
+      "amount": 100000,
+      "type": "DEPOSIT",
+      "razorpayPaymentId": "pay_ST4X7VtS3r0aDe"
+    },
+    {
+      "id": "wvq9pf",
+      "createdAt": "2026-03-19T11:45:10.469Z",
+      "status": "COMPLETED",
+      "userId": "test-buyer-id",
+      "amount": 100000,
+      "type": "DEPOSIT",
+      "razorpayPaymentId": "pay_ST4XquCAGQSNFO"
+    },
+    {
+      "id": "4b2wvi",
+      "createdAt": "2026-03-19T12:38:58.445Z",
+      "status": "COMPLETED",
+      "userId": "test-buyer-id",
+      "projectId": "pooauk",
+      "amount": 22499.7,
+      "type": "UPFRONT"
+    },
+    {
+      "id": "7r37qv",
+      "createdAt": "2026-03-19T12:40:44.271Z",
+      "status": "IN_PROGRESS",
+      "userId": "test-freelancer-id",
+      "amount": -75000,
+      "type": "WITHDRAWAL",
+      "description": "Withdrawal to Bank Transfer (66555455666565)"
+    },
+    {
+      "id": "9m9jze",
+      "createdAt": "2026-03-19T12:43:39.363Z",
+      "status": "COMPLETED",
+      "userId": "test-buyer-id",
+      "amount": 500,
+      "type": "DEPOSIT",
+      "razorpayPaymentId": "pay_ST5XcjRTGDLVGU"
+    }
+  ],
+  "mockMessages": []
+}
