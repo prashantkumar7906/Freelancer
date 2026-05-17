@@ -27,12 +27,10 @@ export async function PUT(req: Request) {
             where: { settingName: "commission_rate" },
             update: {
                 value: commissionRate.toString(),
-                updatedBy: updatedBy || "admin",
             },
             create: {
                 settingName: "commission_rate",
                 value: commissionRate.toString(),
-                updatedBy: updatedBy || "admin",
             },
         });
 
